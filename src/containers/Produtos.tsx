@@ -25,7 +25,7 @@ const ProdutosComponent = ({
   return (
     <>
       <S.Produtos>
-        {produtos.map((produto) => (
+        {produtos?.map((produto) => (
           <Produto
             estaNosFavoritos={produtoEstaNosFavoritos(produto)}
             key={produto.id}
