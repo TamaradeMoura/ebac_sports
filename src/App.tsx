@@ -14,30 +14,12 @@ export type Produto = {
 }
 
 function App() {
-  const [produtos, setProdutos] = useState<Produto[]>([])
-  const [favoritos, setFavoritos] = useState<Produto[]>([])
-
-  useEffect(() => {
-    fetch('/api/ebac_sports')
-      .then((res) => res.json())
-      .then((res) => setProdutos(res))
-  }, [])
-
-  function favoritar(produto: Produto) {
-    if (favoritos.find((p) => p.id === produto.id)) {
-      const favoritosSemProduto = favoritos.filter((p) => p.id !== produto.id)
-      setFavoritos(favoritosSemProduto)
-    } else {
-      setFavoritos([...favoritos, produto])
-    }
-  }
-
   return (
     <Provider store={store}>
       <GlobalStyle />
       <div className="container">
         <Header />
-        <Produtos favoritos={favoritos} favoritar={favoritar} produtos={[]} />
+        <Produtos />
       </div>
     </Provider>
   )

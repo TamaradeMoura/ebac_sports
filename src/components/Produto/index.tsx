@@ -1,15 +1,16 @@
 import { useDispatch } from 'react-redux'
+import { FaHeart } from 'react-icons/fa'
+import { FaHeartBroken } from 'react-icons/fa'
 
 import { Produto as ProdutoType } from '../../App'
 import * as S from './styles'
 
 import { adicionar } from '../../store/reducers/carrinho'
 import { favoritar } from '../../store/reducers/favoritos'
+import { useState } from 'react'
 
 type Props = {
   produto: ProdutoType
-
-  estaNosFavoritos: boolean
 }
 
 export const paraReal = (valor: number) =>
@@ -17,12 +18,11 @@ export const paraReal = (valor: number) =>
     valor
   )
 
-const ProdutoComponent = ({
-  produto,
-
-  estaNosFavoritos
-}: Props) => {
+const ProdutoComponent = ({ produto }: Props) => {
   const dispatch = useDispatch()
+
+  const [adicionadosAoCarrinho, setAdicionadosAoCarrinho] = useState(false)
+  const [adicionadosAosFavoritos, setAdicionadosAosFavoritos] = useState(false)
 
   return (
     <S.Produto>
@@ -31,15 +31,29 @@ const ProdutoComponent = ({
       </S.Capa>
       <S.Titulo>{produto.nome}</S.Titulo>
       <S.Prices>
+        <small>{paraReal(produto.preco)}</small>
         <strong>{paraReal(produto.preco)}</strong>
+        <S.Tag>Sair</S.Tag>
       </S.Prices>
-      <S.BtnComprar onClick={() => dispatch(favoritar(produto))} type="button">
-        {estaNosFavoritos
-          ? '- Remover dos favoritos'
-          : '+ Adicionar aos favoritos'}
+      <S.BtnComprar
+        onClick={() => {
+          dispatch(adicionar(produto))
+          setAdicionadosAoCarrinho(!adicionadosAoCarrinho)
+        }}
+        type="button"
+      >
+        {adicionadosAoCarrinho
+          ? '- Remover do carrinho'
+          : '+ Adicionar ao carrinho'}
       </S.BtnComprar>
-      <S.BtnComprar onClick={() => dispatch(adicionar(produto))} type="button">
-        Adicionar ao carrinho
+      <S.BtnComprar
+        onClick={() => {
+          dispatch(favoritar(produto))
+          setAdicionadosAosFavoritos(!adicionadosAosFavoritos)
+        }}
+        type="button"
+      >
+        {adicionadosAosFavoritos ? <FaHeart /> : <FaHeartBroken />}
       </S.BtnComprar>
     </S.Produto>
   )
